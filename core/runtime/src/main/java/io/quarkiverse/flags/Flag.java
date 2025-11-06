@@ -1,11 +1,13 @@
 package io.quarkiverse.flags;
 
+import java.util.NoSuchElementException;
+
 import io.smallrye.common.annotation.CheckReturnValue;
 import io.smallrye.mutiny.Uni;
 
 /**
  * A feature flag.
- * 
+ *
  * @see FlagManager
  */
 public interface Flag {
@@ -14,15 +16,6 @@ public interface Flag {
      * @return the name of the feature (not {@code null})
      */
     String feature();
-
-    /**
-     * Computes the current state of the feature flag.
-     *
-     * @return {@code true} if the feature flag is {@code on}, {@code false} otherwise
-     */
-    default boolean isOn() {
-        return computeAndAwait().isOn();
-    }
 
     /**
      * Computes the current state of the feature flag.
@@ -71,15 +64,30 @@ public interface Flag {
     }
 
     /**
-     * Represents a state of a feature flag.
+     * Represents the state of a feature flag.
      */
     interface State {
 
         /**
-         * @return {@code true} if the feature flag is {@code on}, {@code false} otherwise
+         *
+         * @return the boolean value
+         * @throws NoSuchElementException if no boolean value is present
          */
-        boolean isOn();
+        boolean getBoolean();
 
+        /**
+         *
+         * @return the string value
+         * @throws NoSuchElementException if no string value is present
+         */
+        String getString();
+
+        /**
+         *
+         * @return the integer value
+         * @throws NoSuchElementException if no integer value is present
+         */
+        int getInteger();
     }
 
     /**

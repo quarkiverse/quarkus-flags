@@ -8,6 +8,10 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import jakarta.enterprise.inject.Produces;
+import jakarta.enterprise.inject.spi.InjectionPoint;
+import jakarta.inject.Singleton;
+
 import io.quarkiverse.flags.Feature;
 import io.quarkiverse.flags.Flag;
 import io.quarkiverse.flags.FlagManager;
@@ -15,9 +19,6 @@ import io.quarkiverse.flags.spi.FlagInterceptor;
 import io.quarkiverse.flags.spi.FlagProvider;
 import io.quarkus.arc.All;
 import io.smallrye.mutiny.Uni;
-import jakarta.enterprise.inject.Produces;
-import jakarta.enterprise.inject.spi.InjectionPoint;
-import jakarta.inject.Singleton;
 
 @Singleton
 public class FlagManagerImpl implements FlagManager {
@@ -27,7 +28,7 @@ public class FlagManagerImpl implements FlagManager {
 
     @All
     List<FlagInterceptor> interceptors;
-    
+
     @Override
     public Optional<Flag> getFlag(String feature) {
         return getFlags().stream()

@@ -8,9 +8,9 @@ public final class ImmutableFlag implements Flag {
     private final String feature;
     private final Flag.State state;
 
-    public ImmutableFlag(String feature, boolean enabled) {
+    public ImmutableFlag(String feature, Flag.State state) {
         this.feature = feature;
-        this.state = enabled ? ImmutableFlagState.ON : ImmutableFlagState.OFF;
+        this.state = state;
     }
 
     @Override

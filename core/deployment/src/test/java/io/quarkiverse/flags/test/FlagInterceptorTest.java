@@ -15,7 +15,7 @@ import io.quarkiverse.flags.Flag.State;
 import io.quarkiverse.flags.FlagManager;
 import io.quarkiverse.flags.InMemoryFlagProvider;
 import io.quarkiverse.flags.spi.FlagInterceptor;
-import io.quarkiverse.flags.spi.ImmutableFlagState;
+import io.quarkiverse.flags.spi.ImmutableBooleanState;
 import io.quarkus.test.QuarkusUnitTest;
 import io.smallrye.mutiny.Uni;
 
@@ -36,7 +36,7 @@ public class FlagInterceptorTest {
         inMemoryFlagProvider.newFlag("alpha")
                 .setEnabled(true)
                 .add();
-        assertFalse(manager.getFlag("alpha").orElseThrow().isOn());
+        assertFalse(manager.getFlag("alpha").orElseThrow().computeAndAwait().getBoolean());
     }
 
     @Priority(10)
@@ -45,7 +45,7 @@ public class FlagInterceptorTest {
 
         @Override
         public Uni<State> afterCompute(Flag flag, State state, ComputationContext computationContext) {
-            if (!state.isOn()) {
+            if (!state.getBoolean()) {
                 throw new IllegalStateException();
             }
             return Uni.createFrom().item(state);
@@ -60,7 +60,7 @@ public class FlagInterceptorTest {
         @Override
         public Uni<State> afterCompute(Flag flag, State state, ComputationContext computationContext) {
             // just invert the state
-            return Uni.createFrom().item(ImmutableFlagState.from(!state.isOn()));
+            return Uni.createFrom().item(ImmutableBooleanState.from(!state.getBoolean()));
         }
 
     }

@@ -11,7 +11,7 @@ import jakarta.inject.Qualifier;
 
 /**
  * Qualifier used to identify {@link Flag} injection points.
- * 
+ *
  * @see Flag
  */
 @Qualifier

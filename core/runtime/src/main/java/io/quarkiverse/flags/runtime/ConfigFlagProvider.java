@@ -1,8 +1,9 @@
 package io.quarkiverse.flags.runtime;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
@@ -11,27 +12,62 @@ import jakarta.inject.Singleton;
 import io.quarkiverse.flags.Flag;
 import io.quarkiverse.flags.spi.FlagProvider;
 import io.quarkiverse.flags.spi.ImmutableFlag;
+import io.smallrye.config.SmallRyeConfig;
 
 @Priority(FlagProvider.DEFAULT_PRIORITY + 1)
 @Singleton
 public class ConfigFlagProvider implements FlagProvider {
 
     @Inject
-    FlagsBuildTimeConfig buildConfig;
+    SmallRyeConfig config;
 
     @Inject
-    FlagsRuntimeConfig runtimeConfig;
+    FlagsBuildTimeConfig buildConfig;
 
     @Override
     public Iterable<Flag> getFlags() {
-        List<Flag> ret = new ArrayList<>();
-        for (Entry<String, FlagConfig> entry : buildConfig.flags().entrySet()) {
-            ret.add(new ImmutableFlag(entry.getKey(), entry.getValue().enabled()));
+        String prefix = buildConfig.configPrefix();
+        Set<String> flagPropertyNames = new HashSet<>();
+        for (String name : config.getPropertyNames()) {
+            if (name.startsWith(prefix)) {
+                flagPropertyNames.add(name);
+            }
         }
-        for (Entry<String, FlagConfig> entry : runtimeConfig.flags().entrySet()) {
-            ret.add(new ImmutableFlag(entry.getKey(), entry.getValue().enabled()));
+
+        if (flagPropertyNames.isEmpty()) {
+            return List.of();
+        }
+
+        List<Flag> ret = new ArrayList<>();
+        for (String name : flagPropertyNames) {
+            ret.add(new ImmutableFlag(name.substring(prefix.length()), new ConfigState(name)));
         }
         return List.copyOf(ret);
+    }
+
+    class ConfigState implements Flag.State {
+
+        final String propertyName;
+
+        ConfigState(String propertyName) {
+            this.propertyName = propertyName;
+        }
+
+        @Override
+        public boolean getBoolean() {
+            return config.getOptionalValue(propertyName, Boolean.class).orElseThrow();
+        }
+
+        @Override
+        public String getString() {
+            return config.getOptionalValue(propertyName, String.class).orElseThrow();
+        }
+
+        @Override
+        public int getInteger() {
+            return config.getOptionalValue(propertyName, Integer.class).orElseThrow();
+        }
+
     }
 
 }

@@ -21,10 +21,10 @@ public class ConfigFlagsTest {
     @RegisterExtension
     static final QuarkusUnitTest config = new QuarkusUnitTest()
             .withEmptyApplication()
-            .overrideConfigKey("quarkus.flags.buildtime.alpha.enabled", "true")
-            .overrideConfigKey("quarkus.flags.buildtime.bravo.enabled", "false")
-            .overrideRuntimeConfigKey("quarkus.flags.runtime.charlie.enabled", "true")
-            .overrideRuntimeConfigKey("quarkus.flags.runtime.delta.enabled", "false");
+            .overrideConfigKey("flag.alpha", "true")
+            .overrideConfigKey("flag.bravo", "0")
+            .overrideRuntimeConfigKey("flag.charlie", "true")
+            .overrideRuntimeConfigKey("flag.delta", "false");
 
     @Inject
     FlagManager manager;
@@ -41,13 +41,14 @@ public class ConfigFlagsTest {
     @Test
     public void testFlags() {
         assertEquals(4, manager.getFlags().size());
-        assertTrue(manager.getFlag("alpha").orElseThrow().isOn());
-        assertFalse(manager.getFlag("bravo").orElseThrow().isOn());
-        assertTrue(manager.getFlag("charlie").orElseThrow().isOn());
-        assertFalse(manager.getFlag("delta").orElseThrow().isOn());
-        assertTrue(alpha.isOn());
+        assertTrue(manager.getFlag("alpha").orElseThrow().computeAndAwait().getBoolean());
+        assertFalse(manager.getFlag("bravo").orElseThrow().computeAndAwait().getBoolean());
+        assertEquals(0, manager.getFlag("bravo").orElseThrow().computeAndAwait().getInteger());
+        assertTrue(manager.getFlag("charlie").orElseThrow().computeAndAwait().getBoolean());
+        assertFalse(manager.getFlag("delta").orElseThrow().computeAndAwait().getBoolean());
+        assertTrue(alpha.computeAndAwait().getBoolean());
         assertTrue(foo.isEmpty());
-        assertFalse(delta.orElseThrow().isOn());
+        assertFalse(delta.orElseThrow().computeAndAwait().getBoolean());
     }
 
 }

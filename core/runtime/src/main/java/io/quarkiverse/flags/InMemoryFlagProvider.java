@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 import io.quarkiverse.flags.Flag.ComputationContext;
 import io.quarkiverse.flags.spi.FlagProvider;
-import io.quarkiverse.flags.spi.ImmutableFlagState;
+import io.quarkiverse.flags.spi.ImmutableBooleanState;
 import io.smallrye.mutiny.Uni;
 
 /**
@@ -27,7 +27,7 @@ public interface InMemoryFlagProvider extends FlagProvider {
     interface FlagDefinition {
 
         default FlagDefinition setEnabled(boolean value) {
-            return setCompute(cc -> ImmutableFlagState.from(value));
+            return setCompute(cc -> ImmutableBooleanState.from(value));
         }
 
         default FlagDefinition setCompute(Function<ComputationContext, Flag.State> fun) {
