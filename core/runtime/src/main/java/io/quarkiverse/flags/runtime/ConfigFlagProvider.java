@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -14,7 +13,6 @@ import io.quarkiverse.flags.spi.FlagProvider;
 import io.quarkiverse.flags.spi.ImmutableFlag;
 import io.smallrye.config.SmallRyeConfig;
 
-@Priority(FlagProvider.DEFAULT_PRIORITY + 1)
 @Singleton
 public class ConfigFlagProvider implements FlagProvider {
 
@@ -23,6 +21,11 @@ public class ConfigFlagProvider implements FlagProvider {
 
     @Inject
     FlagsBuildTimeConfig buildConfig;
+
+    @Override
+    public int getPriority() {
+        return FlagProvider.DEFAULT_PRIORITY + 1;
+    }
 
     @Override
     public Iterable<Flag> getFlags() {

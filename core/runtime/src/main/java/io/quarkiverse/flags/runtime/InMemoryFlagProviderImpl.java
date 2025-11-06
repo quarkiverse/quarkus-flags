@@ -4,7 +4,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
-import jakarta.annotation.Priority;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -18,7 +17,6 @@ import io.quarkiverse.flags.InMemoryFlagProvider;
 import io.quarkiverse.flags.spi.FlagProvider;
 import io.smallrye.mutiny.Uni;
 
-@Priority(FlagProvider.DEFAULT_PRIORITY + 3)
 @Singleton
 public class InMemoryFlagProviderImpl implements InMemoryFlagProvider {
 
@@ -29,6 +27,11 @@ public class InMemoryFlagProviderImpl implements InMemoryFlagProvider {
 
     @Inject
     Event<FlagRemoved> flagRemoved;
+
+    @Override
+    public int getPriority() {
+        return FlagProvider.DEFAULT_PRIORITY + 3;
+    }
 
     @Override
     public Iterable<Flag> getFlags() {

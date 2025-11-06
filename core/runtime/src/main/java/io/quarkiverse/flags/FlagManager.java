@@ -15,6 +15,10 @@ public interface FlagManager {
     Optional<Flag> getFlag(String feature);
 
     /**
+     * Collects all flags from all providers.
+     * <p>
+     * A flag from a provider with higher priority takes precedence and overrides flags with the same {@link Flag#feature()}
+     * from providers with lower priority.
      *
      * @return an immutable set of feature flags
      */
