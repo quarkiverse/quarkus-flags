@@ -16,6 +16,7 @@
     <modules>
         <module>core</module>
         <module>jpa</module>
+        <module>security</module>
     </modules>
     <properties>
         <quarkus.version>3.27.0</quarkus.version>

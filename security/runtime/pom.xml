@@ -3,15 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.quarkiverse.flags</groupId>
-        <artifactId>quarkus-flags-jpa-parent</artifactId>
+        <artifactId>quarkus-flags-security-parent</artifactId>
         <version>999-SNAPSHOT</version>
     </parent>
-    <artifactId>quarkus-flags-jpa</artifactId>
-    <name>Quarkus Feature Flags - JPA - Runtime</name>
+    <artifactId>quarkus-flags-security</artifactId>
+    <name>Quarkus Feature Flags - Security - Runtime</name>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-hibernate-orm</artifactId>
+            <artifactId>quarkus-security</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkiverse.flags</groupId>
