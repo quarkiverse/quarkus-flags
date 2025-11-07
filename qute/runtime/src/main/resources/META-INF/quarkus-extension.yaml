@@ -1,0 +1,9 @@
+name: Feature Flags Qute
+metadata:
+  keywords:
+    - flags
+    - toggles
+  #guide: 
+  categories:
+    - "miscellaneous"
+  status: "preview"
