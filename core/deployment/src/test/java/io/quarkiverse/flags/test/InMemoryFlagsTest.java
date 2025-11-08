@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.quarkiverse.flags.Flag;
-import io.quarkiverse.flags.FlagAdded;
-import io.quarkiverse.flags.FlagRemoved;
 import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.InMemoryFlagProvider;
+import io.quarkiverse.flags.InMemoryFlagProvider.FlagAdded;
+import io.quarkiverse.flags.InMemoryFlagProvider.FlagRemoved;
 import io.quarkiverse.flags.spi.ImmutableBooleanValue;
 import io.quarkiverse.flags.spi.ImmutableStringValue;
 import io.quarkus.test.QuarkusUnitTest;
@@ -43,7 +43,7 @@ public class InMemoryFlagsTest {
 
     @Test
     public void testFlags() {
-        assertEquals(0, flags.asList().size());
+        assertEquals(0, flags.findAll().size());
         assertEquals(0, flagObservers.added.size());
         assertEquals(0, flagObservers.removed.size());
 
@@ -75,8 +75,8 @@ public class InMemoryFlagsTest {
         assertEquals("no", deltaValue.asString());
         assertThrows(NoSuchElementException.class, () -> deltaValue.asInt());
 
-        flags.forEach(f -> inMemoryFlagProvider.removeFlag(f.feature()));
-        assertEquals(0, flags.asList().size());
+        flags.findAll().forEach(f -> inMemoryFlagProvider.removeFlag(f.feature()));
+        assertEquals(0, flags.findAll().size());
         assertEquals(4, flagObservers.added.size());
         assertEquals(4, flagObservers.removed.size());
     }

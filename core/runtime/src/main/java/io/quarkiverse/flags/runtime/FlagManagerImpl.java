@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
@@ -62,6 +61,11 @@ public class FlagManagerImpl implements FlagManager {
         this.providers = List.copyOf(sortedProviders);
         this.interceptors = interceptors.stream().sorted().collect(Collectors.toUnmodifiableList());
         this.evaluators = evaluators.stream().collect(toMap(FlagEvaluator::id, Function.identity()));
+    }
+
+    @Override
+    public List<Flag> findAll() {
+        return List.copyOf(getFlags());
     }
 
     @Override
@@ -119,16 +123,6 @@ public class FlagManagerImpl implements FlagManager {
             return find(feature.value());
         }
         return Optional.empty();
-    }
-
-    @Override
-    public Iterator<Flag> iterator() {
-        return getFlags().iterator();
-    }
-
-    @Override
-    public Stream<Flag> stream() {
-        return getFlags().stream();
     }
 
     class InterceptedFlag implements Flag {

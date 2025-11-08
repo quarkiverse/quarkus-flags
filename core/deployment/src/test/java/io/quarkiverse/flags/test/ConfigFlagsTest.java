@@ -59,7 +59,7 @@ public class ConfigFlagsTest {
 
     @Test
     public void testFlags() {
-        List<Flag> all = flags.asList();
+        List<Flag> all = flags.findAll();
         assertEquals(4, all.size(), all.toString());
         assertTrue(flags.find("alpha").orElseThrow().isOn());
         assertFalse(flags.find("bravo").orElseThrow().computeAndAwait().asBoolean());

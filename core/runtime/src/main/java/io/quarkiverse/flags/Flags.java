@@ -2,27 +2,16 @@ package io.quarkiverse.flags;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
-
-import io.quarkiverse.flags.spi.FlagProvider;
 
 /**
- * Provides access to all flags from all providers.
+ * Represents a central point to access feature flags.
  * <p>
  * A flag from a provider with higher priority takes precedence and overrides flags with the same {@link Flag#feature()}
  * from providers with lower priority.
  *
  * @see Flag
- * @see FlagProvider
  */
-public interface Flags extends Iterable<Flag> {
-
-    /**
-     * @return an immutable list of flags
-     */
-    default List<Flag> asList() {
-        return stream().toList();
-    }
+public interface Flags {
 
     /**
      * @param feature
@@ -31,8 +20,8 @@ public interface Flags extends Iterable<Flag> {
     Optional<Flag> find(String feature);
 
     /**
-     * @return the stream of flags
+     * @return an immutable list of feature flags
      */
-    Stream<Flag> stream();
+    List<Flag> findAll();
 
 }

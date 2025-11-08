@@ -12,8 +12,6 @@ import jakarta.inject.Singleton;
 import io.quarkiverse.flags.Flag;
 import io.quarkiverse.flags.Flag.ComputationContext;
 import io.quarkiverse.flags.Flag.Value;
-import io.quarkiverse.flags.FlagAdded;
-import io.quarkiverse.flags.FlagRemoved;
 import io.quarkiverse.flags.InMemoryFlagProvider;
 import io.quarkiverse.flags.spi.FlagProvider;
 import io.smallrye.mutiny.Uni;

@@ -27,7 +27,7 @@ public class FlagDefinitionTest {
     @TestTransaction
     @Test
     public void testFlagDefinition() {
-        assertEquals(0, flags.asList().size());
+        assertEquals(0, flags.findAll().size());
 
         MyFlag alpha = new MyFlag();
         alpha.feature = "alpha";

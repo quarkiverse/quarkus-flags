@@ -16,14 +16,28 @@ public interface InMemoryFlagProvider extends FlagProvider {
     /**
      * @param feature
      * @return a new definition
+     * @see FlagAdded
      */
     FlagDefinition newFlag(String feature);
 
     /**
      * @param feature
      * @return the removed flag, or {@code null}
+     * @see FlagRemoved
      */
     Flag removeFlag(String feature);
+
+    /**
+     * A CDI event that is fired synchronously when a new feature flag is added to the system.
+     */
+    record FlagAdded(Flag flag) {
+    }
+
+    /**
+     * A CDI event that is fired synchronously when a feature flag is removed from the system.
+     */
+    record FlagRemoved(Flag flag) {
+    }
 
     interface FlagDefinition {
 
