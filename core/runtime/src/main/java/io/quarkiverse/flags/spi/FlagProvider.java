@@ -2,7 +2,7 @@ package io.quarkiverse.flags.spi;
 
 import io.quarkiverse.flags.Flag;
 
-public interface FlagProvider extends Comparable<FlagProvider> {
+public interface FlagProvider {
 
     int DEFAULT_PRIORITY = 1;
 
@@ -17,17 +17,12 @@ public interface FlagProvider extends Comparable<FlagProvider> {
     Iterable<Flag> getFlags();
 
     /**
-     * The priority is reflected when collecting all flags in {@link FlagManager#getFlags()}.
+     * The priority is reflected when the system collects all flags from all providers.
      *
      * @return the priority
      */
     default int getPriority() {
         return DEFAULT_PRIORITY;
-    }
-
-    @Override
-    default int compareTo(FlagProvider other) {
-        return Integer.compare(other.getPriority(), getPriority());
     }
 
 }

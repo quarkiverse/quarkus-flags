@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.function.Function;
 
 import jakarta.enterprise.event.Event;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import io.quarkiverse.flags.Flag;
@@ -21,11 +20,14 @@ public class InMemoryFlagProviderImpl implements InMemoryFlagProvider {
 
     private final ConcurrentMap<String, Flag> flags = new ConcurrentHashMap<>();
 
-    @Inject
-    Event<FlagAdded> flagAdded;
+    private final Event<FlagAdded> flagAdded;
 
-    @Inject
-    Event<FlagRemoved> flagRemoved;
+    private final Event<FlagRemoved> flagRemoved;
+
+    public InMemoryFlagProviderImpl(Event<FlagAdded> flagAdded, Event<FlagRemoved> flagRemoved) {
+        this.flagAdded = flagAdded;
+        this.flagRemoved = flagRemoved;
+    }
 
     @Override
     public int getPriority() {

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import io.quarkiverse.flags.Flag;
@@ -19,14 +18,17 @@ import io.quarkiverse.flags.spi.ImmutableStringValue;
 @Singleton
 public class ConfigFlagProvider implements FlagProvider {
 
-    @Inject
-    FlagManager manager;
+    private final FlagManager manager;
 
-    @Inject
-    FlagsBuildTimeConfig buildConfig;
+    private final FlagsBuildTimeConfig buildConfig;
 
-    @Inject
-    FlagsRuntimeConfig runtimeConfig;
+    private final FlagsRuntimeConfig runtimeConfig;
+
+    public ConfigFlagProvider(FlagManager manager, FlagsBuildTimeConfig buildConfig, FlagsRuntimeConfig runtimeConfig) {
+        this.manager = manager;
+        this.buildConfig = buildConfig;
+        this.runtimeConfig = runtimeConfig;
+    }
 
     @Override
     public int getPriority() {

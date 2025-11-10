@@ -4,8 +4,8 @@ import static java.util.stream.Collectors.toMap;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +23,6 @@ import org.jboss.logging.Logger;
 import io.quarkiverse.flags.Feature;
 import io.quarkiverse.flags.Flag;
 import io.quarkiverse.flags.spi.FlagEvaluator;
-import io.quarkiverse.flags.spi.FlagInterceptor;
 import io.quarkiverse.flags.spi.FlagManager;
 import io.quarkiverse.flags.spi.FlagProvider;
 import io.quarkus.arc.All;
@@ -38,16 +37,18 @@ public class FlagManagerImpl implements FlagManager {
 
     private final List<FlagProvider> providers;
 
-    private final List<FlagInterceptor> interceptors;
-
     private final Map<String, FlagEvaluator> evaluators;
 
     private FlagManagerImpl(@All List<FlagProvider> providers,
-            @All List<FlagInterceptor> interceptors,
             @All List<FlagEvaluator> evaluators) {
         List<FlagProvider> sortedProviders = new ArrayList<>();
         int lastPriority = Integer.MAX_VALUE;
-        for (FlagProvider provider : providers.stream().sorted().toList()) {
+        for (FlagProvider provider : providers.stream().sorted(new Comparator<FlagProvider>() {
+            @Override
+            public int compare(FlagProvider o1, FlagProvider o2) {
+                return Integer.compare(o2.getPriority(), o1.getPriority());
+            }
+        }).toList()) {
             if (provider.getPriority() < lastPriority) {
                 sortedProviders.add(provider);
             } else {
@@ -59,7 +60,6 @@ public class FlagManagerImpl implements FlagManager {
             lastPriority = provider.getPriority();
         }
         this.providers = List.copyOf(sortedProviders);
-        this.interceptors = interceptors.stream().sorted().collect(Collectors.toUnmodifiableList());
         this.evaluators = evaluators.stream().collect(toMap(FlagEvaluator::id, Function.identity()));
     }
 
@@ -79,7 +79,7 @@ public class FlagManagerImpl implements FlagManager {
         Set<Flag> ret = new HashSet<>();
         for (FlagProvider provider : providers) {
             for (Flag flag : provider.getFlags()) {
-                if (!ret.add(new InterceptedFlag(flag))) {
+                if (!ret.add(new DelegatingFlag(flag))) {
                     LOG.debugf(
                             "Flag with feature %s from provider %s is ignored: a flag with the same feature is declared by a provider with higher priority",
                             flag.feature(), provider.getClass().getName());
@@ -125,11 +125,11 @@ public class FlagManagerImpl implements FlagManager {
         return Optional.empty();
     }
 
-    class InterceptedFlag implements Flag {
+    class DelegatingFlag implements Flag {
 
         private final Flag delegate;
 
-        InterceptedFlag(Flag delegate) {
+        DelegatingFlag(Flag delegate) {
             this.delegate = delegate;
         }
 
@@ -145,22 +145,7 @@ public class FlagManagerImpl implements FlagManager {
 
         @Override
         public Uni<Value> compute(ComputationContext computationContext) {
-            Uni<Value> state = delegate.compute(computationContext);
-            if (!interceptors.isEmpty()) {
-                return applyNextInterceptor(state, computationContext, interceptors.iterator());
-            }
-            return state;
-        }
-
-        Uni<Value> applyNextInterceptor(Uni<Value> state, ComputationContext computationContext, Iterator<FlagInterceptor> it) {
-            if (it.hasNext()) {
-                return state.chain(s -> {
-                    FlagInterceptor interceptor = it.next();
-                    Uni<Value> nextState = interceptor.afterCompute(delegate, s, computationContext);
-                    return applyNextInterceptor(nextState, computationContext, it);
-                });
-            }
-            return state;
+            return delegate.compute(computationContext);
         }
 
         @Override
@@ -180,7 +165,7 @@ public class FlagManagerImpl implements FlagManager {
 
         @Override
         public String toString() {
-            return "InterceptedFlag [delegate=" + delegate + "]";
+            return "DelegatingFlag [delegate=" + delegate + "]";
         }
 
     }
