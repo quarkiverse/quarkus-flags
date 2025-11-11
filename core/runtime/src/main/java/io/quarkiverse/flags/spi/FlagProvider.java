@@ -1,7 +1,14 @@
 package io.quarkiverse.flags.spi;
 
 import io.quarkiverse.flags.Flag;
+import io.quarkiverse.flags.Flags;
 
+/**
+ * Represents a provider of feature flags.
+ * <p>
+ * Implementation classes must be CDI beans. Qualifiers are ignored. {@link jakarta.enterprise.context.Dependent} beans are
+ * reused.
+ */
 public interface FlagProvider {
 
     int DEFAULT_PRIORITY = 1;
@@ -13,6 +20,8 @@ public interface FlagProvider {
      * from providers with lower priority.
      *
      * @return the flags
+     * @see Flags#find(String)
+     * @see Flags#findAll()
      */
     Iterable<Flag> getFlags();
 

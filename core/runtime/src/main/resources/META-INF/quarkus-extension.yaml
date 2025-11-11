@@ -1,10 +1,9 @@
 name: Feature Flags
-description: TODO
 metadata:
   keywords:
     - flags
     - toggles
-  #guide: https://quarkiverse.github.io/quarkiverse-docs/business-score/dev/
+  #guide:
   categories:
     - "miscellaneous"
   status: "preview"

@@ -42,7 +42,8 @@ public interface InMemoryFlagProvider extends FlagProvider {
     interface FlagDefinition {
 
         default FlagDefinition setEnabled(boolean value) {
-            return setCompute(cc -> ImmutableBooleanValue.from(value));
+            Flag.Value val = ImmutableBooleanValue.from(value);
+            return setCompute(cc -> val);
         }
 
         default FlagDefinition setCompute(Function<ComputationContext, Flag.Value> fun) {
