@@ -21,7 +21,7 @@
     </modules>
     <properties>
         <quarkus.version>3.27.0</quarkus.version>
-        <sundrio.version>0.220.1</sundrio.version>
+        <sundrio.version>0.230.2</sundrio.version>
     </properties>
     <dependencyManagement>
         <dependencies>
