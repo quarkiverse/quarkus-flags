@@ -1,0 +1,10 @@
+= Quarkus Feature Flags
+
+include::./includes/attributes.adoc[]
+
+TODO
+
+[[extension-configuration-reference]]
+== Extension configuration reference
+
+include::includes/quarkus-flags.adoc[leveloffset=+1, opts=optional]

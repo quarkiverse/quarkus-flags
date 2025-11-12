@@ -1,0 +1,5 @@
+name: quarkus-flags
+title: Feature Flags
+version: dev
+nav:
+  - modules/ROOT/nav.adoc

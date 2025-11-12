@@ -30,7 +30,7 @@ import io.quarkus.gizmo2.creator.BlockCreator;
  *
  * @see FlagDefinition
  */
-public final class FlagDefinitionBuildItem extends SimpleBuildItem {
+final class FlagDefinitionBuildItem extends SimpleBuildItem {
 
     private final ClassInfo entityClass;
 
