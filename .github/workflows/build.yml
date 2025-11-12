@@ -36,7 +36,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, windows-latest ]
+        # Temporarily disable windows builds: https://github.com/testcontainers/testcontainers-java/issues/11212
+        #os: [ ubuntu-latest, windows-latest ]
+        os: [ ubuntu-latest]
         java-version: [ 21, 25 ]
     runs-on: ${{ matrix.os }}
     steps:
