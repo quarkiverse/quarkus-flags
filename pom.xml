@@ -18,7 +18,7 @@
         <module>qute</module>
     </modules>
     <properties>
-        <quarkus.version>3.27.1</quarkus.version>
+        <quarkus.version>3.30.0</quarkus.version>
         <sundrio.version>0.230.2</sundrio.version>
     </properties>
     <dependencyManagement>
