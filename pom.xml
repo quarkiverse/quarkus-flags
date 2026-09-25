@@ -24,8 +24,8 @@
         <module>docs-rag</module>
     </modules>
     <properties>
+        <sundrio.version>0.400.1</sundrio.version>
         <quarkus.version>3.33.3.3</quarkus.version>
-        <sundrio.version>0.400.0</sundrio.version>
         <openfeature-sdk.version>1.22.1</openfeature-sdk.version>
         <jacoco.version>0.8.15</jacoco.version>
         <jacoco.dest-file>${maven.multiModuleProjectDirectory}/target/jacoco.exec</jacoco.dest-file>
