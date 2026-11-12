@@ -24,6 +24,7 @@ import io.quarkus.arc.deployment.GeneratedBeanBuildItem;
 import io.quarkus.arc.deployment.GeneratedBeanGizmo2Adaptor;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.builditem.nativeimage.ConstantBootstrapBuildItem;
 import io.quarkus.gizmo2.ClassOutput;
 import io.quarkus.gizmo2.Const;
 import io.quarkus.gizmo2.Expr;
@@ -45,7 +46,8 @@ public class FlagHibernateOrmProcessor {
 
     @BuildStep
     void generateFlagProvider(FlagHibernateOrmBuildTimeConfig config, List<PersistenceUnitDescriptorBuildItem> descriptors,
-            List<FlagSourceBuildItem> flagSources, BuildProducer<GeneratedBeanBuildItem> generatedBeans) {
+            List<FlagSourceBuildItem> flagSources, BuildProducer<GeneratedBeanBuildItem> generatedBeans,
+            BuildProducer<ConstantBootstrapBuildItem> constantBootstraps) {
         if (flagSources.isEmpty()) {
             LOG.debugf("No @FlagSource found - no JPA FlagProvider will be generated");
             return;
@@ -53,7 +55,7 @@ public class FlagHibernateOrmProcessor {
         if (descriptors.stream().noneMatch(pud -> pud.getPersistenceUnitName().equals(config.persistenceUnitName()))) {
             throw new IllegalStateException("Invalid persistence unit selected: " + config.persistenceUnitName());
         }
-        ClassOutput classOutput = new GeneratedBeanGizmo2Adaptor(generatedBeans);
+        ClassOutput classOutput = new GeneratedBeanGizmo2Adaptor(generatedBeans, constantBootstraps);
         Gizmo gizmo = Gizmo.create(classOutput);
 
         for (FlagSourceBuildItem flagSource : flagSources) {
