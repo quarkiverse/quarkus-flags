@@ -12,12 +12,12 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import io.quarkiverse.flags.RegisterFlag;
 import io.quarkiverse.flags.WithMetadata;
 import io.quarkus.qute.Qute;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class FlagNamespaceResolverTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(QuteFlags.class))
             .overrideRuntimeConfigKey("quarkus.flags.runtime.alpha.value", "true")
             .overrideRuntimeConfigKey("quarkus.flags.runtime.bravo.value", "true")

@@ -18,12 +18,12 @@ import io.quarkiverse.flags.RegisterFlag;
 import io.quarkiverse.flags.WithEvaluator;
 import io.quarkiverse.flags.WithMetadata;
 import io.quarkiverse.flags.cron.CronFlagEvaluator;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class CronFlagEvaluatorTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(CronFlags.class));
 
     @Inject

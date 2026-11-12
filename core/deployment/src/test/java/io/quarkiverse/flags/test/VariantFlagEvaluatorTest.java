@@ -16,14 +16,14 @@ import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.StringValue;
 import io.quarkiverse.flags.VariantFlagEvaluator;
 import io.quarkiverse.flags.spi.FlagEvaluator;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 
 public class VariantFlagEvaluatorTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(UpperCaseEvaluator.class))
             .overrideRuntimeConfigKey("quarkus.flags.runtime.checkout.value", "Buy Now")
             .overrideRuntimeConfigKey("quarkus.flags.runtime.checkout.meta.evaluator", VariantFlagEvaluator.ID)

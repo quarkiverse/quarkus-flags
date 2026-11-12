@@ -23,12 +23,12 @@ import io.quarkiverse.flags.WithMetadata;
 import io.quarkiverse.flags.spi.FlagEvaluator;
 import io.quarkiverse.flags.spi.FlagManager;
 import io.quarkiverse.flags.spi.InitializedEvaluatedFlag;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class TimeSpanFlagEvaluatorTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(TimeSpanFlags.class))
             // start-only in the past -> enabled
             .overrideRuntimeConfigKey("quarkus.flags.runtime.alpha.value", "true")

@@ -21,7 +21,7 @@ import dev.openfeature.sdk.providers.memory.InMemoryProvider;
 import io.quarkiverse.flags.Flag.Value;
 import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.openfeature.OpenFeatureFlags;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.quarkus.vertx.VertxContextSupport;
 
 public class OpenFeatureFlagProviderTest {
@@ -64,7 +64,7 @@ public class OpenFeatureFlagProviderTest {
                     .build()));
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withEmptyApplication()
             .overrideRuntimeConfigKey("quarkus.flags.openfeature.bool-flag.type", "boolean")
             .overrideRuntimeConfigKey("quarkus.flags.openfeature.bool-flag.default-value", "false")
