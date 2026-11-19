@@ -24,12 +24,12 @@ import io.quarkiverse.flags.InMemoryFlagProvider;
 import io.quarkiverse.flags.InMemoryFlagProvider.FlagAdded;
 import io.quarkiverse.flags.InMemoryFlagProvider.FlagRemoved;
 import io.quarkiverse.flags.StringValue;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class InMemoryFlagsTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(FlagObservers.class));
 
     @Inject

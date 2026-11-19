@@ -19,14 +19,14 @@ import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.InMemoryFlagProvider;
 import io.quarkiverse.flags.spi.ComponentOrder;
 import io.quarkiverse.flags.spi.FlagProvider;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 
 public class FlagProviderProducerTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(Producers.class));
 
     @Inject

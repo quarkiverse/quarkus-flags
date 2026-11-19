@@ -11,14 +11,14 @@ import io.quarkiverse.flags.Flag;
 import io.quarkiverse.flags.Flag.ComputationContext;
 import io.quarkiverse.flags.Flag.Value;
 import io.quarkiverse.flags.spi.FlagEvaluator;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 
 public class FlagEvaluatorsDuplicitIdTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(FooEvaluator.class, BarEvaluator.class))
             .setExpectedException(IllegalStateException.class, true);
 

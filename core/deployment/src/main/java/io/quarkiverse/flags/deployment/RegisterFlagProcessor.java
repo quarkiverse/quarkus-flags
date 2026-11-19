@@ -47,6 +47,7 @@ import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.BytecodeTransformerBuildItem;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
+import io.quarkus.deployment.builditem.nativeimage.ConstantBootstrapBuildItem;
 import io.quarkus.gizmo2.ClassOutput;
 import io.quarkus.gizmo2.Const;
 import io.quarkus.gizmo2.Expr;
@@ -140,7 +141,8 @@ public class RegisterFlagProcessor {
 
     @BuildStep
     void generateRegisteredFlagProviders(List<RegisteredFlagBuildItem> registeredFlags,
-            BuildProducer<GeneratedBeanBuildItem> generatedBeans) {
+            BuildProducer<GeneratedBeanBuildItem> generatedBeans,
+            BuildProducer<ConstantBootstrapBuildItem> constantBootstraps) {
         if (registeredFlags.isEmpty()) {
             return;
         }
@@ -151,7 +153,7 @@ public class RegisterFlagProcessor {
             byClass.computeIfAbsent(declaringClass, k -> new ArrayList<>()).add(item);
         }
 
-        ClassOutput classOutput = new GeneratedBeanGizmo2Adaptor(generatedBeans);
+        ClassOutput classOutput = new GeneratedBeanGizmo2Adaptor(generatedBeans, constantBootstraps);
         Gizmo gizmo = Gizmo.create(classOutput);
 
         for (Map.Entry<String, List<RegisteredFlagBuildItem>> entry : byClass.entrySet()) {

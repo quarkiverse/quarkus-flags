@@ -1,5 +1,6 @@
 package io.quarkiverse.flags.hibernate.orm.deployment;
 
+import java.lang.constant.ClassDesc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import jakarta.inject.Singleton;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 import org.jboss.jandex.ClassInfo;
@@ -24,6 +26,7 @@ import io.quarkus.arc.deployment.GeneratedBeanBuildItem;
 import io.quarkus.arc.deployment.GeneratedBeanGizmo2Adaptor;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.builditem.nativeimage.ConstantBootstrapBuildItem;
 import io.quarkus.gizmo2.ClassOutput;
 import io.quarkus.gizmo2.Const;
 import io.quarkus.gizmo2.Expr;
@@ -45,7 +48,8 @@ public class FlagHibernateOrmProcessor {
 
     @BuildStep
     void generateFlagProvider(FlagHibernateOrmBuildTimeConfig config, List<PersistenceUnitDescriptorBuildItem> descriptors,
-            List<FlagSourceBuildItem> flagSources, BuildProducer<GeneratedBeanBuildItem> generatedBeans) {
+            List<FlagSourceBuildItem> flagSources, BuildProducer<GeneratedBeanBuildItem> generatedBeans,
+            BuildProducer<ConstantBootstrapBuildItem> constantBootstraps) {
         if (flagSources.isEmpty()) {
             LOG.debugf("No @FlagSource found - no JPA FlagProvider will be generated");
             return;
@@ -53,7 +57,7 @@ public class FlagHibernateOrmProcessor {
         if (descriptors.stream().noneMatch(pud -> pud.getPersistenceUnitName().equals(config.persistenceUnitName()))) {
             throw new IllegalStateException("Invalid persistence unit selected: " + config.persistenceUnitName());
         }
-        ClassOutput classOutput = new GeneratedBeanGizmo2Adaptor(generatedBeans);
+        ClassOutput classOutput = new GeneratedBeanGizmo2Adaptor(generatedBeans, constantBootstraps);
         Gizmo gizmo = Gizmo.create(classOutput);
 
         for (FlagSourceBuildItem flagSource : flagSources) {
@@ -105,11 +109,13 @@ public class FlagHibernateOrmProcessor {
                     mc.addAnnotation(Transactional.class);
 
                     mc.body(bc -> {
-                        // List<MyFlag> flags = em.createQuery("from MyFlag").getResultList();
+                        // List<MyFlag> flags = em.createQuery("from MyFlag", MyFlag.class).getResultList();
                         Expr query = bc.invokeInterface(
-                                MethodDesc.of(EntityManager.class, "createQuery", Query.class, String.class),
+                                MethodDesc.of(EntityManager.class, "createQuery", TypedQuery.class, String.class,
+                                        Class.class),
                                 this_.field(emField),
-                                Const.of("from " + flagSource.getEntityName()));
+                                Const.of("from " + flagSource.getEntityName()),
+                                Const.of(ClassDesc.of(entityClass.name().toString())));
                         LocalVar flags = bc.localVar("flags",
                                 bc.invokeInterface(MethodDesc.of(Query.class, "getResultList", List.class),
                                         query));
@@ -147,12 +153,14 @@ public class FlagHibernateOrmProcessor {
                     ParamVar featureParam = mc.parameter("feature", String.class);
 
                     mc.body(bc -> {
-                        // Query query = em.createQuery("from MyFlag where feature = :feature");
+                        // TypedQuery<MyFlag> query = em.createQuery("from MyFlag where feature = :feature", MyFlag.class);
                         LocalVar query = bc.localVar("query", bc.invokeInterface(
-                                MethodDesc.of(EntityManager.class, "createQuery", Query.class, String.class),
+                                MethodDesc.of(EntityManager.class, "createQuery", TypedQuery.class, String.class,
+                                        Class.class),
                                 this_.field(emField),
                                 Const.of("from " + flagSource.getEntityName() + " where "
-                                        + flagSource.getFeature().name() + " = :feature")));
+                                        + flagSource.getFeature().name() + " = :feature"),
+                                Const.of(ClassDesc.of(entityClass.name().toString()))));
                         // query.setParameter("feature", "foo");
                         bc.invokeInterface(MethodDesc.of(Query.class, "setParameter", Query.class, String.class, Object.class),
                                 query, Const.of(flagSource.getFeature().name()), featureParam);

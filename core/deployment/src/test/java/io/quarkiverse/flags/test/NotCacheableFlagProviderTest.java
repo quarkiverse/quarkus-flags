@@ -9,12 +9,12 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 
 import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.RegisterFlag;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class NotCacheableFlagProviderTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(MyRegisteredFlags.class))
             .overrideRuntimeConfigKey("quarkus.flags.cache.enabled", "true")
             .overrideRuntimeConfigKey("quarkus.flags.cache.ttl", "10m");

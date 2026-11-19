@@ -15,14 +15,14 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import io.quarkiverse.flags.Flag;
 import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.spi.FlagProvider;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 
 public class InMemoryFlagCacheProviderTtlTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(MyFlagProvider.class))
             .overrideRuntimeConfigKey("quarkus.flags.cache.enabled", "true")
             .overrideRuntimeConfigKey("quarkus.flags.cache.ttl", "10m")

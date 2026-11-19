@@ -9,12 +9,12 @@ import io.quarkiverse.flags.RegisterFlag;
 import io.quarkiverse.flags.WithEvaluator;
 import io.quarkiverse.flags.WithMetadata;
 import io.quarkiverse.flags.spi.FlagEvaluator;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class WithEvaluatorConflictTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClass(ConflictFlags.class))
             .setExpectedException(IllegalStateException.class, true);
 

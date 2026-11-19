@@ -22,14 +22,14 @@ import io.quarkiverse.flags.RegisterFlag;
 import io.quarkiverse.flags.WithEvaluator;
 import io.quarkiverse.flags.WithMetadata;
 import io.quarkiverse.flags.spi.FlagEvaluator;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 
 public class RegisterFlagTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(
                     root -> root.addClasses(MyFlags.class, FlagConsumer.class, NegateEvaluator.class));
 

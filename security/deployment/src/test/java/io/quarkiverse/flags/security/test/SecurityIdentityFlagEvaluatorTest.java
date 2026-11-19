@@ -17,12 +17,12 @@ import io.quarkiverse.flags.security.SecurityIdentityFlagEvaluator;
 import io.quarkus.security.identity.CurrentIdentityAssociation;
 import io.quarkus.security.runtime.QuarkusPrincipal;
 import io.quarkus.security.runtime.QuarkusSecurityIdentity;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 
 public class SecurityIdentityFlagEvaluatorTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(SecurityFlags.class))
             .overrideRuntimeConfigKey("quarkus.flags.runtime.delta.value", "true")
             .overrideRuntimeConfigKey("quarkus.flags.runtime.delta.meta.evaluator", SecurityIdentityFlagEvaluator.ID)

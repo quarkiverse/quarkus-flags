@@ -26,14 +26,14 @@ import io.quarkiverse.flags.InMemoryFlagProvider;
 import io.quarkiverse.flags.spi.FlagProvider;
 import io.quarkus.cache.Cache;
 import io.quarkus.cache.CacheName;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
 
 public class FlagProviderCachingDecoratorTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(MyFlagProvider.class, CachingDecorator.class));
 
     @Inject

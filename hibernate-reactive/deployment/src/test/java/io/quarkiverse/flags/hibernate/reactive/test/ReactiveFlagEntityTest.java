@@ -18,7 +18,7 @@ import io.quarkiverse.flags.Flag.ComputationContext;
 import io.quarkiverse.flags.Flag.Value;
 import io.quarkiverse.flags.Flags;
 import io.quarkiverse.flags.spi.FlagEvaluator;
-import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.QuarkusExtensionTest;
 import io.quarkus.vertx.VertxContextSupport;
 import io.smallrye.common.annotation.Identifier;
 import io.smallrye.mutiny.Uni;
@@ -26,7 +26,7 @@ import io.smallrye.mutiny.Uni;
 public class ReactiveFlagEntityTest {
 
     @RegisterExtension
-    static final QuarkusUnitTest config = new QuarkusUnitTest()
+    static final QuarkusExtensionTest config = new QuarkusExtensionTest()
             .withApplicationRoot(root -> root.addClasses(MyReactiveFlag.class, InvertingFlagEvaluator.class))
     //.overrideConfigKey("quarkus.hibernate-orm.log.sql", "true")
     ;
